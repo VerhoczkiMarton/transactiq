@@ -21,4 +21,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     signIn: '/auth/signin',
     error: '/auth/error',
   },
+  callbacks: {
+    async redirect({ url }) {
+      const baseUrl = env.NEXTAUTH_URL;
+      return url.startsWith('/') ? `${baseUrl}${url}` : url;
+    },
+  },
 });

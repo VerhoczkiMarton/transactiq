@@ -15,6 +15,7 @@ const envSchema = z.object({
     .union([z.literal('true'), z.literal('false')])
     .optional()
     .default('true'),
+  NEXTAUTH_URL: z.string().url(),
 
   // API
   NEXT_PUBLIC_API_URL: z.string().url(),

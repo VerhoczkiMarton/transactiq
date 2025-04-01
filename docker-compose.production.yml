@@ -1,0 +1,67 @@
+services:
+  database:
+    image: postgres:17
+    restart: always
+    env_file: .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    env_file: .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  backup:
+    image: postgres:17
+    restart: always
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - database
+    command: |
+      bash -c '
+        sleep 3600
+        while true; do
+          pg_dump -h database -U postgres -d postgres -f /backups/backup_$$(date +%Y%m%d_%H%M%S).sql
+          find /backups -type f -name "backup_*.sql" -mtime +7 -delete
+          sleep 86400
+        done
+      '
+    environment:
+      PGPASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+
+volumes:
+  postgres_data:

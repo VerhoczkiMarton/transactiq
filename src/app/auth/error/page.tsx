@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,12 +11,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 
-export default function AuthError() {
+function AuthErrorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
+
+  useEffect(() => {
+    if (error) {
+      console.error('Authentication error:', error);
+    }
+  }, [error]);
 
   const getErrorMessage = (errorCode: string | null) => {
     switch (errorCode) {
@@ -49,36 +55,46 @@ export default function AuthError() {
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      console.error('Authentication error:', error);
-    }
-  }, [error]);
+  return (
+    <Card className="w-full max-w-md">
+      <CardHeader className="space-y-1 text-center">
+        <div className="flex justify-center">
+          <AlertCircle className="text-destructive h-12 w-12" />
+        </div>
+        <CardTitle className="text-2xl font-bold">Authentication Error</CardTitle>
+        <CardDescription>There was a problem signing you in</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="bg-destructive/15 text-destructive rounded-md p-4 text-sm">
+          {getErrorMessage(error)}
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-center gap-4">
+        <Button onClick={() => router.push('/auth/signin')} variant="default">
+          Try Again
+        </Button>
+        <Button onClick={() => router.push('/')} variant="outline">
+          Go Home
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
 
+function Fallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>
+  );
+}
+
+export default function AuthError() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center">
-            <AlertCircle className="text-destructive h-12 w-12" />
-          </div>
-          <CardTitle className="text-2xl font-bold">Authentication Error</CardTitle>
-          <CardDescription>There was a problem signing you in</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="bg-destructive/15 text-destructive rounded-md p-4 text-sm">
-            {getErrorMessage(error)}
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-center gap-4">
-          <Button onClick={() => router.push('/auth/signin')} variant="default">
-            Try Again
-          </Button>
-          <Button onClick={() => router.push('/')} variant="outline">
-            Go Home
-          </Button>
-        </CardFooter>
-      </Card>
+      <Suspense fallback={<Fallback />}>
+        <AuthErrorContent />
+      </Suspense>
     </div>
   );
 }

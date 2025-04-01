@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,7 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 
-export default function SignIn() {
+function SignInContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
@@ -147,5 +147,21 @@ export default function SignIn() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+function Fallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={<Fallback />}>
+      <SignInContent />
+    </Suspense>
   );
 }

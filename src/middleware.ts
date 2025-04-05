@@ -28,7 +28,6 @@ export function middleware() {
   return response;
 }
 
-// Apply middleware to all routes
 export const config = {
   matcher: ['/((?!api/auth|_next/static|_next/image|favicon.ico).*)'],
 };

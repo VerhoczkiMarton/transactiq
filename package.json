@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run prisma:generate && npm run prisma:migrate:deploy && next dev --turbopack",
-    "build": "npm run prisma:generate && npm run prisma:migrate:deploy && next build --no-lint",
-    "start": "next start",
+    "dev": "next dev --turbopack",
+    "build": "next build --no-lint",
+    "start": "npm run prisma:generate && npm run prisma:migrate:deploy && next start",
     "prisma:generate": "prisma generate --allow-no-models",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",

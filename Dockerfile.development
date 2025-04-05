@@ -13,8 +13,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npm run prisma:generate
-
 FROM node:23-alpine AS runner
 WORKDIR /app
 
@@ -36,4 +34,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/components.json ./
 
 USER nextjs
 
-CMD ["npm", "run", "dev:migrate"]
+CMD ["npm", "run", "dev"]

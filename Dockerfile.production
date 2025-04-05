@@ -33,4 +33,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./
 
 USER nextjs
 
-CMD ["npm", "run", "start:migrate"]
+CMD ["npm", "run", "start"]

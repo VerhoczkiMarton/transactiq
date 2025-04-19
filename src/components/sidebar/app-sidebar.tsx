@@ -13,9 +13,9 @@ import {
   SettingsIcon,
   Wallet,
 } from 'lucide-react';
-import { NavMain } from '@/components/nav-main';
-import { NavSecondary } from '@/components/nav-secondary';
-import { NavUser } from '@/components/nav-user';
+import { NavMain } from '@/components/sidebar/nav-main';
+import { NavSecondary } from '@/components/sidebar/nav-secondary';
+import { NavUser } from '@/components/sidebar/nav-user';
 import {
   Sidebar,
   SidebarContent,
@@ -38,22 +38,22 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
   const mainNavItems: NavItem[] = [
     {
       title: 'Dashboard',
-      url: '#',
+      url: '/dashboard',
       icon: LayoutDashboardIcon,
     },
     {
       title: 'Transactions',
-      url: '#',
+      url: '/transactions',
       icon: BanknoteArrowUp,
     },
     {
       title: 'Wallets',
-      url: '#',
+      url: '/wallets',
       icon: Wallet,
     },
     {
       title: 'Analytics',
-      url: '#',
+      url: '/analytics',
       icon: BarChartIcon,
     },
   ];

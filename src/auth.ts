@@ -25,11 +25,20 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async redirect({ url }) {
-      console.log('Redirect URL:', url);
-      const baseUrl = env.NEXTAUTH_URL;
-      console.log('Base URL:', baseUrl);
+    async redirect({ url, baseUrl }) {
       return url.startsWith('/') ? `${baseUrl}${url}` : url;
+    },
+    async jwt({ token, user }) {
+      if (user?.id) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?.id) {
+        session.user.id = token.id;
+      }
+      return session;
     },
   },
 });

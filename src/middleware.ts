@@ -33,7 +33,15 @@ export async function middleware(request: NextRequest) {
     route => path === route || path.startsWith(`${route}/`)
   );
   const isPublicRoute = publicRoutes.some(route => path === route || path.startsWith(`${route}/`));
-  const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
+
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: isProduction ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
+    secureCookie: isProduction,
+  });
 
   console.log('Token:', JSON.stringify(token));
   console.log('Requested Path:', path);

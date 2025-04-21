@@ -44,7 +44,7 @@ export default function WelcomePage() {
               <div className="bg-primary text-primary-foreground flex h-12 w-12 items-center justify-center rounded-full">
                 <Wallet className="h-6 w-6" />
               </div>
-              <h1 className="ml-3 text-3xl font-bold">FinTrack</h1>
+              <h1 className="ml-3 text-3xl font-bold">TransactIQ</h1>
             </div>
             <div className="text-center">
               <h2 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
@@ -114,7 +114,7 @@ export default function WelcomePage() {
           >
             <h3 className="mb-4 text-2xl font-bold">Ready to take control of your finances?</h3>
             <p className="text-muted-foreground mx-auto mb-6 max-w-2xl">
-              Join thousands of users who have transformed their financial lives with FinTrack.
+              Join thousands of users who have transformed their financial lives with TransactIQ.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button size="lg" onClick={() => router.push('/auth/signin')}>
@@ -146,7 +146,7 @@ export default function WelcomePage() {
               <span className="text-muted-foreground text-sm">Secure & encrypted</span>
             </div>
             <p className="text-muted-foreground mt-6 text-sm">
-              © 2023 FinTrack. All rights reserved.
+              © 2025 TransactIQ. All rights reserved.
             </p>
           </footer>
         </div>

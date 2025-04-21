@@ -26,7 +26,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async redirect({ url }) {
+      console.log('Redirect URL:', url);
       const baseUrl = env.NEXTAUTH_URL;
+      console.log('Base URL:', baseUrl);
       return url.startsWith('/') ? `${baseUrl}${url}` : url;
     },
   },

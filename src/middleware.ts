@@ -35,6 +35,9 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.some(route => path === route || path.startsWith(`${route}/`));
   const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
 
+  console.log('Token:', JSON.stringify(token));
+  console.log('Requested Path:', path);
+
   if (isProtectedRoute && !token) {
     return NextResponse.redirect(new URL('/unauthorized', request.url));
   }

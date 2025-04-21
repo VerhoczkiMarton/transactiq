@@ -17,7 +17,6 @@ services:
         limits:
           cpus: '1'
           memory: 1G
-
   application:
     build:
       context: .
@@ -25,7 +24,6 @@ services:
     env_file: .env
     ports:
       - '3000:3000'
-      - '5555:5555'
     volumes:
       - .:/app
       - /app/node_modules
@@ -34,6 +32,21 @@ services:
         condition: service_healthy
     environment:
       - WATCHPACK_POLLING=true
+  prisma-studio:
+    image: node:lts-alpine3.17
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: npx prisma studio --port 5555 --browser none
+    ports:
+      - '5555:5555'
+    env_file:
+      - .env
+    depends_on:
+      database:
+        condition: service_healthy
+      application:
+        condition: service_started
 
 volumes:
   postgres_data:

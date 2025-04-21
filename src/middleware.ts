@@ -1,8 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export function middleware() {
+const protectedRoutes = ['/dashboard', '/transactions', '/wallets', '/analytics'];
+const publicRoutes = ['/welcome', '/auth', '/unauthorized'];
+
+export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
-
   const securityHeaders = {
     // Prevent MIME type sniffing
     'X-Content-Type-Options': 'nosniff',
@@ -24,6 +27,21 @@ export function middleware() {
   Object.entries(securityHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
+
+  const path = request.nextUrl.pathname;
+  const isProtectedRoute = protectedRoutes.some(
+    route => path === route || path.startsWith(`${route}/`)
+  );
+  const isPublicRoute = publicRoutes.some(route => path === route || path.startsWith(`${route}/`));
+  const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
+
+  if (isProtectedRoute && !token) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url));
+  }
+
+  if (path === '/' && !token && !isPublicRoute) {
+    return NextResponse.redirect(new URL('/welcome', request.url));
+  }
 
   return response;
 }

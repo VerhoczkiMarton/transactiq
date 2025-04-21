@@ -21,6 +21,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     signIn: '/auth/signin',
     error: '/auth/error',
   },
+  session: {
+    strategy: 'jwt',
+  },
   callbacks: {
     async redirect({ url }) {
       const baseUrl = env.NEXTAUTH_URL;

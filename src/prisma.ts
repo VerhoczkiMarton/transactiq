@@ -1,20 +1,47 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
-// PrismaClient is attached to the `global` object in development to prevent
-// exhausting your database connection limit.
-// Learn more: https://pris.ly/d/help/next-js-best-practices
+let PrismaEdge: typeof PrismaClient;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  PrismaEdge = require('@prisma/client/edge').PrismaClient;
+} catch {
+  PrismaEdge = PrismaClient;
+}
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+declare global {
+  // eslint-disable-next-line no-var
+  var prismaGlobal: PrismaClient | undefined;
+}
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
+const prismaOptions = {
+  log:
+    process.env.NODE_ENV === 'development'
+      ? (['query', 'info', 'warn', 'error'] as Prisma.LogLevel[])
+      : (['error'] as Prisma.LogLevel[]),
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
     },
-  });
+  },
+};
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+const isEdgeRuntime = () => {
+  return process.env.NEXT_RUNTIME === 'edge';
+};
+
+function createPrismaClient() {
+  if (isEdgeRuntime()) {
+    return new PrismaEdge(prismaOptions);
+  } else {
+    if (process.env.NODE_ENV === 'development') {
+      if (!global.prismaGlobal) {
+        global.prismaGlobal = new PrismaClient(prismaOptions);
+      }
+      return global.prismaGlobal;
+    }
+
+    return new PrismaClient(prismaOptions);
+  }
+}
+
+export const prisma = createPrismaClient();

@@ -64,10 +64,8 @@ async function WalletsList() {
 
 export default function WalletsPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Suspense fallback={<WalletsLoading />}>
-        <WalletsList />
-      </Suspense>
-    </div>
+    <Suspense fallback={<WalletsLoading />}>
+      <WalletsList />
+    </Suspense>
   );
 }

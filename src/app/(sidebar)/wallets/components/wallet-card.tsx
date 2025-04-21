@@ -35,14 +35,16 @@ export function WalletCard({ wallet }: WalletCardProps) {
   return (
     <Card className="transition-shadow hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-xl">{wallet.name}</CardTitle>
+        <CardTitle className="truncate text-xl">{wallet.name}</CardTitle>
         <Badge variant={wallet.type === 'MANUAL' ? 'outline' : 'default'}>
           {wallet.type === 'MANUAL' ? 'Manual' : 'Synchronized'}
         </Badge>
       </CardHeader>
 
       <CardContent>
-        <p className="text-2xl font-bold">{formatCurrency(wallet.balance, wallet.currency)}</p>
+        <p className="truncate text-2xl font-bold">
+          {formatCurrency(wallet.balance, wallet.currency)}
+        </p>
       </CardContent>
 
       <CardFooter className="text-muted-foreground flex justify-between pt-0 text-sm">

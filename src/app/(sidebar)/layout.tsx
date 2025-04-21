@@ -10,7 +10,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: React.R
         <AppSidebar variant="inset" />
         <SidebarInset>
           <SiteHeader />
-          {children}
+          <div className="m-4">{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </SessionProvider>

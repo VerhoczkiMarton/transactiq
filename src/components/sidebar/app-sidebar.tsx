@@ -1,11 +1,11 @@
 'use client';
 
-import * as React from 'react';
+import type * as React from 'react';
 import { useSession } from 'next-auth/react';
-import { ComponentType, SVGProps } from 'react';
+import type { ComponentType, SVGProps } from 'react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import {
-  BanknoteArrowUp,
+  BanknoteIcon as BanknoteArrowUp,
   BarChartIcon,
   HelpCircleIcon,
   LayoutDashboardIcon,
@@ -24,6 +24,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from '@/components/ui/sidebar';
 
 export type NavItem = {
@@ -98,6 +99,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
       <SidebarFooter>
         <NavUser user={session?.user} />
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }

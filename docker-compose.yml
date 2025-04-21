@@ -27,23 +27,13 @@ services:
       - '3000:3000'
       - '5555:5555'
     volumes:
-      - ./src:/app/src
-      - ./public:/app/public
-      - ./prisma:/app/prisma
-      - ./components.json:/app/components.json
-      - ./next.config.ts:/app/next.config.ts
-      - ./tsconfig.json:/app/tsconfig.json
-      - ./postcss.config.mjs:/app/postcss.config.mjs
+      - .:/app
+      - /app/node_modules
     depends_on:
       database:
         condition: service_healthy
     environment:
       - WATCHPACK_POLLING=true
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
 
 volumes:
   postgres_data:

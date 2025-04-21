@@ -27,9 +27,11 @@ import {
 import { User } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
 import { KeyRound } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function NavUser({ user }: { user: User | undefined }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -85,7 +87,13 @@ export function NavUser({ user }: { user: User | undefined }) {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()}>
+              <DropdownMenuItem
+                onClick={() => {
+                  signOut({ redirect: false }).then(() => {
+                    router.push('/welcome');
+                  });
+                }}
+              >
                 <IconLogout />
                 Sign Out
               </DropdownMenuItem>

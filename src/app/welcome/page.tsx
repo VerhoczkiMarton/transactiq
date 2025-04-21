@@ -182,7 +182,7 @@ function TestimonialCard({ quote, author }: { quote: string; author: string }) {
         <div className="text-primary mb-4">
           <CheckCircle2 className="h-6 w-6" />
         </div>
-        <p className="text-muted-foreground mb-4 italic">`&quot;`{quote}`&quot;`</p>
+        <p className="text-muted-foreground mb-4 italic">&quot;{quote}&quot;</p>
         <p className="font-medium">{author}</p>
       </CardContent>
     </Card>

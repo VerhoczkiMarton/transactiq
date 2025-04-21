@@ -15,6 +15,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  wallets       Wallet[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   createdAt     DateTime        @default(now())
@@ -78,4 +79,19 @@ model Authenticator {
 
   @@id([userId, credentialID])
   @@index([userId])
+}
+
+model Wallet {
+  id        String      @id @default(cuid())
+  name      String
+  balance   Decimal
+  currency  String
+  type      WalletType
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum WalletType {
+  MANUAL
+  SYNCHRONIZED
 }
